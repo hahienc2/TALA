@@ -42,7 +42,7 @@ window._MyRoom = {
   vtDoiThu: null,
   XepVitriNguoiChoi() {
     // can sua lai truong hop 3 -4 nguoi choi
-    let MyID = _WS.ID;
+    let MyID = _svtransport._WS().ID;
     let _users = window._MyRoom.cardRoom.mess.users;
     this.viTriNguoiChoi = [];
     this.vtDoiThu = [];
@@ -57,7 +57,7 @@ window._MyRoom = {
     this.viTriNguoiChoi.push(obj);
 
     if (_users.length == 2) {
-      for (let i = 0; i < _users.length; i++) {
+      for (let i = 0; i < 1; i++) {
         if (i != vitriUser) {
           obj = new Object();
           obj.id = _users[i].id;
@@ -66,6 +66,7 @@ window._MyRoom = {
 
           this.vtDoiThu.push(obj);
           this.viTriNguoiChoi.push(obj);
+
         }
 
       }
@@ -550,7 +551,7 @@ socket.on("create-room-update", function (data) {
   
 })
 
-socket.on("start-room", function (data) {
+socket.on("start-room", function (message) {
   console.log("## startRoom");
   _WS.state = "start";
   window._MyRoom.isGamePlay = "start";
