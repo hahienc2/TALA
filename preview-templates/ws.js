@@ -8,7 +8,7 @@ var _WS = {
   };
   
   _WS.init = function () {
-    _WS.client = new Colyseus.Client("ws://206.189.146.52:2567/");
+    _WS.client = new Colyseus.Client("ws://silver.silvergames.fun:2567/");
     //_WS.client = new Colyseus.Client("ws://localhost:2567");
     _WS.room = null;
     _WS.roomID = "";

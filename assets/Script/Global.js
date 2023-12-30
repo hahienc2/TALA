@@ -3,8 +3,13 @@
 // Learn Attribute:
 //  - https://docs.cocos.com/creator/2.4/manual/en/scripting/reference/attributes.html
 // Learn life-cycle callbacks:
+
+const { log } = require("console");
+
 //  - https://docs.cocos.com/creator/2.4/manual/en/scripting/life-cycle-callbacks.html
 window.Global = {
+
+  isaacserver: true,
 
   // vị trí đánh bài trên bàn
   PlayerSelect: 0,
@@ -162,21 +167,21 @@ window._MyRoom = {
   svThangVuaDanhBai: -1,// khoi tao = -1 chua thang nao danh bai 
   CheckTaoBocBai(svdanhbai) {
     //window._MyRoom.CheckTaoBocBai(null);
-    
-      if(svdanhbai != null) this.svThangVuaDanhBai = svdanhbai;
 
-      if ( this.svThangVuaDanhBai >= (this.soNguoiChoi - 1)) {
-        this.svBocBai = 0;
-      } else {
-        this.svBocBai =  this.svThangVuaDanhBai  + 1;
-      }
+    if (svdanhbai != null) this.svThangVuaDanhBai = svdanhbai;
 
-      let idlocal = this.idlocal(null,this.svBocBai);
-    if(idlocal.id == 0){
+    if (this.svThangVuaDanhBai >= (this.soNguoiChoi - 1)) {
+      this.svBocBai = 0;
+    } else {
+      this.svBocBai = this.svThangVuaDanhBai + 1;
+    }
+
+    let idlocal = this.idlocal(null, this.svBocBai);
+    if (idlocal.id == 0) {
       console.log("tao dc boc bai ne");
       return true;
 
-    }else{
+    } else {
       return false;
 
     }
@@ -194,7 +199,7 @@ window._WSL = {
     _WS.client
       .getAvailableRooms("cardGame")
       .then((rooms) => {
-        console.log("rooms xx", rooms);
+        //console.log("rooms xx", rooms);
         callback(rooms);
 
       })
@@ -465,3 +470,98 @@ cc.Class({
 
   // update (dt) {},
 });
+
+window._svtransport = {
+  getLobby(callback) {
+    if (Global.isaacserver) {
+      isaacsv.getLobby(function (params) {
+        callback(params);
+      });
+    } else {
+      _WSL.getLobby(function (params) {
+        callback(params);
+      });
+    }
+  },
+  JoinOppo(callback) {
+    if (Global.isaacserver) {
+      isaacsv.JoinOppo(function (params) {
+        callback(params);
+      })
+    } else {
+      _WSL.JoinOppo(function (params) {
+        callback(params);
+      })
+    }
+  },
+  _WS(){
+    if (Global.isaacserver) return isaacsv._WS;
+    else return _WS
+    
+  },
+  start(){
+    if (Global.isaacserver) return isaacsv.start();
+    else return   _WS.start();
+    
+  },
+}
+
+window.isaacsv = {
+  _WS:null,
+  listrooms: [],
+  createRoom: null,
+  getLobby(callback) {
+    socket.emit("available-room", "ABC");
+    var self = this;
+    setTimeout(function () {
+      console.log(isaacsv.listrooms);
+      callback(isaacsv.listrooms)
+    }, 1000);
+
+  },
+  JoinOppo(callback) {
+    socket.emit("create-room", "ABC");
+    var self = this;
+    setTimeout(function () {
+      console.log(isaacsv.createRoom);
+      callback(isaacsv.createRoom);
+    }, 1000);
+  },
+  start(){
+    socket.emit("start-room", "ABC");
+
+  }
+}
+
+socket.on("available-room", function (data) {
+  isaacsv.listrooms = data;
+})
+
+socket.on("create-room", function (data) {
+  isaacsv.createRoom = data;
+  isaacsv._WS = {
+    ID: data.socid, roomID : data.id, users: data.users
+  }
+  //console.log(isaacsv._WS);
+})
+
+socket.on("create-room-update", function (data) {
+  isaacsv._WS.users = data.users;
+  
+})
+
+socket.on("start-room", function (data) {
+  console.log("## startRoom");
+  _WS.state = "start";
+  window._MyRoom.isGamePlay = "start";
+  window._MyRoom.cardRoom = message;
+  window._MyRoom.curUser = message.userID;
+  window._MyRoom.curAction = message.mess.action;
+  console.log(message);
+})
+
+socket.on("danh-co-return", function (data) {
+  console.log("danh co  " + data);
+  //socket.emit("danh-co","ABC");
+})
+

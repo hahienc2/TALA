@@ -58,9 +58,8 @@ cc.Class({
         //     self.JoinOppoX();
 
         // })
-        _WSL.getLobby(function (params) {
-            //console.log("roomx2 ",params);
-            if (params.length <= 0) _WSL.JoinOppo(function (res) {
+        _svtransport.getLobby(function (params) {
+            if (params.length <= 0) _svtransport.JoinOppo(function (res) {
                 console.log(res);
                 if (res.hasJoined) {
                     _MyRoom.room = res;
@@ -81,7 +80,7 @@ cc.Class({
     btnJoinRoom() {
         var self = this;
         cc.find("Canvas").getComponent("InitGame").playBtnS();
-        _WSL.JoinOppo(function (res) {
+        _svtransport.JoinOppo(function (res) {
             console.log(res);
             if (res.hasJoined) {
                 _MyRoom.room = res;
@@ -94,7 +93,7 @@ cc.Class({
         });
     },
     btnPlay() {
-        _WS.start();
+        _svtransport.start();
         cc.find("Canvas").getComponent("InitGame").playBtnS();
         
     },
@@ -102,7 +101,7 @@ cc.Class({
         var self = this;
         //
         self.schedule(function () {
-            var sng = _WS.users.length;
+            var sng = _svtransport._WS().users.length;
             self.soNguoi(sng);
             if (self.chuPhong) {
                 // chu phong
