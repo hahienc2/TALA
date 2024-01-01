@@ -298,7 +298,7 @@ cc.Class({
         userIcon.getComponent("card").DanhLabai(obj)
         tableCard.addChild(userIcon);
         
-        _WS.getMatch(_Glb.cardObj(cardObj.id));
+        _svtransport.getMatch(_Glb.cardObj(cardObj.id));
 
         // an an phom
         this.node.getChildByName("Button").getChildByName("anphom").active = false;
@@ -306,10 +306,10 @@ cc.Class({
 
         //showbt danh bai
         _MyRoom.curAction = 'after';
-        _MyRoom.curUser = _WS.ID;
+        _MyRoom.curUser = _svtransport._WS().ID;
         this.checkMessX();
         //tao vua boc bai
-        let idsv = _MyRoom.idsv(_WS.ID)
+        let idsv = _MyRoom.idsv(_svtransport._WS().ID)
         window._MyRoom.CheckTaoBocBai(idsv.id);
         
         this.CheckBocBai();
@@ -478,7 +478,7 @@ cc.Class({
      //  if (this.node.getChildByName("Game").getChildByName("bocbai2").active == true) {
             // let socardconlai = this.cardList.length;
             //  let randomx = Math.floor(Math.random() * socardconlai);
-            _WS.getPool();
+            _svtransport.getPool();
             this.needUpdate = true;
      //}
     },
@@ -867,7 +867,7 @@ cc.Class({
         console.log("mss gl <<");
         _MyRoom.curAction = mss.action;
         _MyRoom.curUser = mss.userID;
-        // if(mss.userID == _WS.ID){
+        // if(mss.userID == _svtransport._WS().ID){
         //     action
         // }
         this.OtherPlayCard(mss);
@@ -878,14 +878,14 @@ cc.Class({
         let self = this;
 
         if (mss.action == "before") {
-            let _idsv = _MyRoom.idsv(mss.clientID, null);
+            let _idsv = _MyRoom.idsv(mss.userID, null);
             window._MyRoom.CheckTaoBocBai(_idsv.id, null);
-            if (_WS.ID == mss.clientID) {
+            if (_svtransport._WS().ID == mss.userID) {
                 console.log("Tao đánh bài");
                 _MyRoom.LuotDanh ++;
             } else {
                 _MyRoom.LuotDanh ++;
-                let idlocal = _MyRoom.idlocal(mss.clientID, null);
+                let idlocal = _MyRoom.idlocal(mss.userID, null);
                 console.log(idlocal.id + " : đánh bài");
                 var _CardTable = cc.find("Canvas/GamePlay/CardTable");
                 _CardTable.getComponent("CardTable").DanhBai2x(mss.check.card.type, mss.check.card.value, idlocal.id);
@@ -900,7 +900,7 @@ cc.Class({
             //     _CardTable.getComponent("CardTable").DanhBai2x(onecardTurn.type,onecardTurn.message,1);
             // }
         }
-        if (mss.userID == _WS.ID) {
+        if (mss.userID == _svtransport._WS().ID) {
             if (mss.action == "after") {
                 console.log(this.needUpdate);
                 if (this.needUpdate) {
@@ -913,7 +913,7 @@ cc.Class({
         }
 
         if (mss.action == "after") {
-            if (_WS.ID == mss.userID) {
+            if (_svtransport._WS().ID == mss.userID) {
                 console.log("Tao bốc bài");
             } else {
                 let idlocal = _MyRoom.idlocal(mss.userID, null);
@@ -930,9 +930,9 @@ cc.Class({
 
     },
     checkMessX() {
-        this.node.getChildByName("Button").getChildByName("danhbai").active = false;
-        if (_MyRoom.curAction == 'after' && _MyRoom.curUser == _WS.ID) {
-            //if (_MyRoom.curUser == _WS.ID) {
+        //this.node.getChildByName("Button").getChildByName("danhbai").active = false;
+        if (_MyRoom.curAction == 'after' && _MyRoom.curUser == _svtransport._WS().ID) {
+            //if (_MyRoom.curUser == _svtransport._WS().ID) {
             this.node.getChildByName("Button").getChildByName("danhbai").active = true;
             //    }
             //else this.needUpdate = true;

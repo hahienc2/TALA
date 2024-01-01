@@ -57,7 +57,7 @@ window._MyRoom = {
     this.viTriNguoiChoi.push(obj);
 
     if (_users.length == 2) {
-      for (let i = 0; i < 1; i++) {
+      for (let i = 0; i < 2; i++) {
         if (i != vitriUser) {
           obj = new Object();
           obj.id = _users[i].id;
@@ -73,7 +73,7 @@ window._MyRoom = {
     }
 
     if (_users.length == 3) {
-      for (let i3 = 0; i3 < 2; i3++) {
+      for (let i3 = 0; i3 < 3; i3++) {
         for (let i = 0; i < _users.length; i++) {
           //if (i3 == 0) {
           let vitriplayer1 = vitriUser + i + 1;
@@ -94,7 +94,7 @@ window._MyRoom = {
     }
 
     if (_users.length == 4) {
-      for (let i3 = 0; i3 < 3; i3++) {
+      for (let i3 = 0; i3 < 4; i3++) {
         for (let i = 0; i < _users.length; i++) {
           //if (i3 == 0) {
           let vitriplayer1 = vitriUser + i + 1;
@@ -117,7 +117,7 @@ window._MyRoom = {
     return this.viTriNguoiChoi;
 
   },
-  idlocal(_id, _idsv) { /// ID // _WS.ID id người chơi
+  idlocal(_id, _idsv) { /// ID // _svtransport._WS().ID id người chơi
     obj = new Object();
     obj.info = "id người chơi trên bàn, user id 0";
     for (let i = 0; i < window._MyRoom.viTriNguoiChoi.length; i++) {
@@ -226,7 +226,7 @@ window._WSL = {
     console.log(room.sessionId, "joined", room.name);
     console.log(room);
     _WS.roomID = room.id;
-    _WS.ID = room.sessionId;
+    _svtransport._WS().ID = room.sessionId;
     _WS.room = room;
     _WS.room.onMessage("join", (message) => {
       _WS.users = message.mess;
@@ -234,12 +234,12 @@ window._WSL = {
 
     });
     _WS.room.onMessage("info", (message) => {
-      if (message.clientID != _WS.ID) {
+      if (message.clientID != _svtransport._WS().ID) {
         console.log(message);
       }
     });
     _WS.room.onMessage("mess", (message) => {
-      if (message.clientID != _WS.ID) {
+      if (message.clientID != _svtransport._WS().ID) {
         console.log(message.mess.mess);
         var _user = message.mess.mess.user;
         _user.name = _user.firstName + " " + _user.lastName;
@@ -501,10 +501,23 @@ window._svtransport = {
     
   },
   start(){
-    if (Global.isaacserver) return isaacsv.start();
-    else return   _WS.start();
+    if (Global.isaacserver)  isaacsv.start();
+    else  _WS.start();
     
   },
+  sendCard(obj){
+    console.log(obj);
+    if (Global.isaacserver) isaacsv.sendCard(obj);
+    else  _WS.sendCard(obj);
+  },
+  getPool(){
+    if (Global.isaacserver)  isaacsv.getPool();
+    else    _WS.getPool();
+  },
+  getMatch(obj){
+    if (Global.isaacserver)  isaacsv.getMatch(obj);
+    else    _WS.getMatch(obj);
+  }
 }
 
 window.isaacsv = {
@@ -531,8 +544,27 @@ window.isaacsv = {
   start(){
     socket.emit("start-room", "ABC");
 
+  },
+  getPool(){
+    socket.emit("getPool", "ABC");
+
+  },
+  sendCard(obj){
+    socket.emit("send-card", obj);
+    console.log(obj);
+  },
+  getMatch(){
+
   }
 }
+
+socket.on("play-card", function (data) {
+  console.log("play card data");
+
+console.log(data);
+  var callGP = cc.find("Canvas/GamePlay");
+  callGP.getComponent("GamePlayCtrl").checkMessGlobal(data);
+})
 
 socket.on("available-room", function (data) {
   isaacsv.listrooms = data;

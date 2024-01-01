@@ -206,7 +206,7 @@ cc.Class({
             obj.mess = "send";
             obj.type = this.type;
             obj.value = this.value;
-            _WS.sendCard(obj);
+            _svtransport.sendCard(obj);
 
 
             
