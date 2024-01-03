@@ -900,6 +900,17 @@ cc.Class({
             //     _CardTable.getComponent("CardTable").DanhBai2x(onecardTurn.type,onecardTurn.message,1);
             // }
         }
+        if (mss.action == "between") {
+            if (_svtransport._WS().ID == mss.userID) {
+                console.log("Tao an đánh bài");
+            } else {
+                let idlocal = _MyRoom.idlocal(mss.userID, null);
+                console.log(idlocal.id + " : an bài");
+                this.isAnBai(mss);
+
+            }
+
+        }
         if (mss.userID == _svtransport._WS().ID) {
             if (mss.action == "after") {
                 console.log(this.needUpdate);
@@ -925,6 +936,8 @@ cc.Class({
 
 
 
+
+
         this.CheckBocBai();
         this.checkMessX();
 
@@ -939,6 +952,43 @@ cc.Class({
         } else {
 
         }
+    },
+    isAnBai(message){
+        window._MyRoom.cardRoom = message;
+        this.getAllCardTurn();
+        this.addAllPlayCard();
+        this.ChiaBai(true);
+
+    },
+    getAllCardTurn(){
+        let _users = window._MyRoom.cardRoom.mess.users
+        if(window._MyRoom.cardRoom.mess.users.length> 1){
+            let cardTurn0 =  _users[_MyRoom.viTriNguoiChoi[0].idTrongArr].cardTurn;
+            let cardTurn1 =  _users[_MyRoom.viTriNguoiChoi[1].idTrongArr].cardTurn
+            _MyRoom.cardOnTable0 = this.cardlist3so(cardTurn0);
+            _MyRoom.cardOnTable1 = this.cardlist3so(cardTurn1);
+            if(_users.length> 2){
+                let cardTurn2 =  _users[_MyRoom.viTriNguoiChoi[2].idTrongArr].cardTurn
+                _MyRoom.cardOnTable2 =  this.cardlist3so(cardTurn2);
+                if(_users.length>= 4){
+                    let cardTurn3 =  _users[_MyRoom.viTriNguoiChoi[3].idTrongArr].cardTurn
+                    _MyRoom.cardOnTable3 =  this.cardlist3so(cardTurn3);
+                }
+            }
+        }
+    },
+    cardlist3so(cardlist){
+        //this.cardlist3so()
+        // card duoi dang 112; 1: type 12 value
+        let arr = [];
+        for (let i = 0; i < cardlist.length; i++) {
+            let _type = parseInt(cardlist[i].type)*100;
+            let _value = parseInt(cardlist[i].value);
+            let onecard = _type + _value;
+            arr.push(parseInt(onecard));
+        }
+        console.log(arr);
+        return arr;
     },
     checkListCardTurn(users) {
         let _users = users;

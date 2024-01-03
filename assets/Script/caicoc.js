@@ -31,7 +31,9 @@ cc.Class({
     // onLoad () {},
 
     start () {
-
+        // 
+        console.log();
+        
     },
     onCollisionEnter: function (other, self) {
        // console.log("what1");

@@ -554,7 +554,9 @@ window.isaacsv = {
     console.log(obj);
   },
   getMatch(){
+    console.log(obj);
 
+    socket.emit("match", obj);
   }
 }
 
