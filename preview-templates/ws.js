@@ -8,17 +8,17 @@ var _WS = {
   };
   
   _WS.init = function () {
-    // _WS.client = new Colyseus.Client("ws://silver.silvergames.fun:2567");
-    // //_WS.client = new Colyseus.Client("ws://localhost:2567");
-    // _WS.room = null;
-    // _WS.roomID = "";
-    // _WS.ID = null;
-    // _WS.enable = false;
-    // _WS.users = [];
-    // _WS.state = "";
-    // setInterval(() => {
-    //   _WS.getLobby();
-    // }, 10000);
+    _WS.client = new Colyseus.Client("ws://silver.silvergames.fun:2567");
+    //_WS.client = new Colyseus.Client("ws://localhost:2567");
+    _WS.room = null;
+    _WS.roomID = "";
+    _WS.ID = null;
+    _WS.enable = false;
+    _WS.users = [];
+    _WS.state = "";
+    setInterval(() => {
+      _WS.getLobby();
+    }, 10000);
   };
   
   _WS.getLobby = function () {

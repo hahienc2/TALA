@@ -9,7 +9,7 @@ const { log } = require("console");
 //  - https://docs.cocos.com/creator/2.4/manual/en/scripting/life-cycle-callbacks.html
 window.Global = {
 
-  isaacserver: true,
+  isaacserver: false,
 
   // vị trí đánh bài trên bàn
   PlayerSelect: 0,
